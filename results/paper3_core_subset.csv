@@ -1,0 +1,14 @@
+channel,full_range,full_spread,core_range,core_spread,core_sign_flips,core_pct_pos
+Outpatient (private GP),-102 to 84,185.5,-102 to 84,185.5,True,18.0
+Emergency attendance,-116 to 84,199.5,-116 to 84,199.5,True,20.3
+Traditional medicine,-112 to 84,196.0,-112 to 84,196.0,True,30.4
+School outbreaks,-98 to 84,182.0,-98 to 84,182.0,True,32.3
+Non-school outbreaks,-91 to 56,147.0,-91 to 56,147.0,True,10.8
+Care-home fever,-133 to 84,217.0,-133 to 84,217.0,True,23.0
+"Admissions, all ages",-49 to 84,133.0,-49 to 63,112.0,True,14.8
+Admissions 0-5y,-21 to 84,105.0,-21 to 70,91.0,True,17.6
+Admissions 6-11y,-49 to 84,133.0,-49 to 84,133.0,True,27.5
+Admissions 12-17y,-84 to 70,154.0,-84 to 70,154.0,True,14.2
+Admissions 18-49y,-56 to 84,140.0,-56 to 84,140.0,True,22.2
+Admissions 50-64y,-56 to 84,140.0,-56 to 84,140.0,True,23.3
+Admissions 65+y,-56 to 84,140.0,-56 to 77,133.0,True,18.4

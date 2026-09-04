@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+runall_output.log
+results/logs/
