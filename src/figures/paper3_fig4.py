@@ -31,6 +31,9 @@ ORDER = ["ILI_PMP", "ILI_AED", "ILI_CMP", "ILI_School", "ILI_NonSchool", "Fever_
 thr = pd.read_csv("paper3_anchor_speccurve.csv")
 rt = pd.read_csv("paper3_rt_speccurve.csv")
 mem = pd.read_csv("paper3_mem_speccurve.csv")
+# Per-method specification counts, read off the curves rather than hardcoded.
+_COUNTS = [d.spec_id.nunique() for d in (thr, mem, rt)]
+NSPEC_LO, NSPEC_HI = min(_COUNTS), max(_COUNTS)
 AQUA = "#1baf7a"
 
 fig, ax = plt.subplots(figsize=(12, 8.6))
@@ -55,7 +58,7 @@ ax.set_yticklabels([LABEL[c] for c in ORDER], fontsize=9.6, color=INK2)
 ax.set_ylim(-len(ORDER) + 0.4, 0.7)
 ax.set_xlim(-330, 130)
 ax.set_xlabel("Median lead over the laboratory positivity threshold (days), "
-              "across 576-864 specifications per method", fontsize=10)
+              f"across {NSPEC_LO:,}-{NSPEC_HI:,} specifications per method", fontsize=10)
 ax.set_title("Two of three method families agree on direction; only one never reverses",
              fontsize=13, color=INK, loc="left", pad=12)
 

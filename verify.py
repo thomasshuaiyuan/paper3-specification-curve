@@ -19,6 +19,8 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 RES = os.path.join(ROOT, "results")
 FIG = os.path.join(ROOT, "figures")
 MS = os.path.join(ROOT, "manuscript", "paper3_manuscript.md")
+US = os.path.join(ROOT, "us")
+FIGSRC = os.path.join(ROOT, "src", "figures")
 
 FAILURES = []
 CHECKS = 0
@@ -45,6 +47,7 @@ thr = pd.read_csv(os.path.join(RES, "paper3_anchor_speccurve.csv"))
 rt = pd.read_csv(os.path.join(RES, "paper3_rt_speccurve.csv"))
 mem = pd.read_csv(os.path.join(RES, "paper3_mem_speccurve.csv"))
 com = pd.read_csv(os.path.join(RES, "paper3_common_subspace.csv"))
+us = pd.read_csv(os.path.join(US, "fluview_speccurve.csv"))
 text = open(MS).read()
 
 print("\n--- specification space ---")
@@ -152,10 +155,10 @@ for m in re.findall(r"\[([0-9,\-–\s]+)\]", text.split("# References")[0]):
         p = p.strip()
         if p.isdigit():
             cited.add(int(p))
-check(len(refs) == 18, f"18 references ({len(refs)})")
+check(len(refs) == 20, f"20 references ({len(refs)})")
 check(not [i for i in range(1, len(refs) + 1) if i not in cited],
       "every reference is cited")
-check(text.count("![") == 4, f"4 illustrations ({text.count('![')})")
+check(text.count("![") == 5, f"5 illustrations ({text.count('![')})")
 
 print("\n--- figures on disk ---")
 for f in ["paper3_fig1_speccurve.png", "paper3_fig3_allchannels.png",
@@ -166,6 +169,70 @@ for f in ["paper3_fig1_speccurve.png", "paper3_fig3_allchannels.png",
 print("\n--- no stale genomic content ---")
 check(not re.search(r"\b(genom|clade|lineage|GISAID|phylo)", text, re.I),
       "manuscript contains no genomic claims")
+
+print("\n--- United States replication ---")
+check(us.spec_id.nunique() == 3024, "3,024 US specifications",
+      f"got {us.spec_id.nunique()}")
+check(us.channel.nunique() == 10, "10 US channels", f"got {us.channel.nunique()}")
+# A channel is not compared with itself when it supplies the comparator, so
+# ILINet is absent under the two comparator levels built on it.
+check(len(us) == 28224, "28,224 US estimates", f"got {len(us)}")
+uv = us[us.median_lead.notna()]
+urev = int(uv.groupby("channel").median_lead
+           .agg(lambda v: (v > 0).any() and (v < 0).any()).sum())
+check(urev == 10, "US sign reverses in 10 of 10 channels", f"got {urev}")
+usp = us.groupby("channel").median_lead.agg(lambda v: v.max() - v.min())
+check(round(usp.min()) == 70 and round(usp.max()) == 91,
+      "US spreads 70 to 91 days", f"got {usp.min():.0f}-{usp.max():.0f}")
+
+
+def swing(d, dim):
+    m = d[d.median_lead.notna()].groupby(dim).median_lead.mean()
+    return float(m.max() - m.min())
+
+
+sw = {d: swing(us, d) for d in
+      ["comparator", "nonseason_q", "stat", "anchor", "sustain",
+       "covid", "smooth", "refperiod"]}
+check(abs(sw["comparator"] - 14.4) < 0.15, "US comparator swing 14.4 d",
+      f"got {sw['comparator']:.1f}")
+check(abs(sw["anchor"] - 5.6) < 0.15, "US anchoring swing 5.6 d",
+      f"got {sw['anchor']:.1f}")
+check(max(sw, key=sw.get) == "comparator",
+      "comparator is the largest US dimension", f"got {max(sw, key=sw.get)}")
+check(sw["refperiod"] < 0.5, "US reference period swing under 0.5 d",
+      f"got {sw['refperiod']:.1f}")
+uo = uv[uv.anchor == "own_series"].groupby("channel").median_lead.mean()
+ur = uv[uv.anchor == "reference_series"].groupby("channel").median_lead.mean()
+check(int((uo > ur).sum()) == 10,
+      "own-series anchoring longer in 10 of 10 US channels",
+      f"got {int((uo > ur).sum())}")
+
+print("\n--- figure labels are computed, not hardcoded ---")
+# The failure this guards against: a figure script keeps a literal
+# specification count in an axis label while the curve underneath it grows.
+# verify.py checks numbers in the manuscript, and cannot see pixels, so the
+# only defence is that no such literal exists in the sources.
+for fn in sorted(os.listdir(FIGSRC)):
+    if not fn.endswith(".py"):
+        continue
+    src = open(os.path.join(FIGSRC, fn)).read()
+    # Docstrings and comments may legitimately name a specification count;
+    # only strings that reach a reader as a label matter here.
+    src = re.sub(r'\"\"\".*?\"\"\"', '', src, flags=re.S)
+    src = re.sub(r"'''.*?'''", '', src, flags=re.S)
+    src = re.sub(r'(?m)^\s*#.*$', '', src)
+    bad = re.findall(r'"[^"]*?\b\d[\d,\-]{2,}[^"]*?specifications?[^"]*?"', src)
+    bad = [b for b in bad if not b.lstrip().startswith("f")]
+    words = re.findall(r'"[^"]*?\b(?:five|six|seven|eight|nine|ten)\s+analytic[^"]*?"',
+                       src, re.I)
+    check(not bad and not words, f"{fn}: no hardcoded specification count",
+          f"{(bad + words)[:1]}")
+
+print("\n--- US figure on disk ---")
+_p = os.path.join(FIG, "paper3_fig_hk_us.png")
+check(os.path.exists(_p) and os.path.getsize(_p) > 20000,
+      "paper3_fig_hk_us.png present")
 
 print(f"\n{CHECKS - len(FAILURES)}/{CHECKS} checks passed")
 if FAILURES:

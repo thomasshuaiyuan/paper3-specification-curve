@@ -30,6 +30,8 @@ AGE_LABEL = {"Adm_0_5": "0–5y", "Adm_6_11": "6–11y", "Adm_12_17": "12–17y"
              "Adm_65_higher": "65+y"}
 
 curve = pd.read_csv("paper3_anchor_speccurve.csv")
+# Read off the curve so the caption cannot drift from the data.
+NSPEC = curve.spec_id.nunique()
 
 fig, axes = plt.subplots(2, 3, figsize=(13.5, 6), sharey=True)
 for ax, ch in zip(axes.ravel(), AGE_LABEL):
@@ -48,7 +50,7 @@ for ax in axes[:, 0]:
 fig.suptitle("The sign of the lead reverses for every age group",
              fontsize=12.5, color=INK, x=0.008, ha="left", y=0.99)
 fig.text(0.008, 0.005,
-         "Each panel sorts the 1,728 threshold-crossing specifications for that "
+         f"Each panel sorts the {NSPEC:,} threshold-crossing specifications for that "
          "age group. Blue: admissions cross first. Orange: laboratory positivity "
          "crosses first.",
          fontsize=8.3, color=MUTED)

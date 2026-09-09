@@ -1,4 +1,5 @@
-"""Figure 3 — range of median lead time across 864 specifications, all 13 channels."""
+"""Figure 3 — range of median lead time across the full specification space,
+all 13 channels. Counts in the labels are derived from the curve, not hardcoded."""
 
 import matplotlib
 matplotlib.use("Agg")
@@ -35,6 +36,11 @@ GROUPS = [("Outpatient", ["ILI_PMP"]), ("Emergency", ["ILI_AED"]),
                                    "Adm_18_49", "Adm_50_64", "Adm_65_higher"])]
 
 c = pd.read_csv("paper3_anchor_speccurve.csv")
+# Label counts are read off the curve so they cannot drift from the data.
+NUMWORD = {5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten"}
+NSPEC = c.spec_id.nunique()
+NDIM = len([x for x in c.columns
+            if x not in ("spec_id", "channel", "n_seasons", "median_lead")])
 fig, ax = plt.subplots(figsize=(11, 7))
 
 y, yticks, ylabels, seps = 0, [], [], []
@@ -62,7 +68,7 @@ ax.set_yticks(yticks); ax.set_yticklabels(ylabels, fontsize=9.6, color=INK2)
 ax.set_ylim(y + 0.4, 0.8)
 ax.set_xlim(-140, 128)
 ax.set_xlabel("Median lead over the laboratory positivity threshold (days), "
-              "across 864 specifications", fontsize=10)
+              f"across {NSPEC:,} specifications", fontsize=10)
 ax.set_title("The sign of the lead reverses in every surveillance channel",
              fontsize=13, color=INK, loc="left", pad=12)
 
@@ -73,7 +79,7 @@ ax.legend(handles, ["Signal crosses first", "Positivity crosses first", "Median 
           bbox_to_anchor=(0.5, -0.10), labelcolor=INK2)
 fig.text(0.008, 0.005,
          "Each bar spans the full range of median lead time obtainable from the same Hong Kong CHP data "
-         "by varying eight analytic choices, of which baseline anchoring is the largest.",
+         f"by varying {NUMWORD[NDIM]} analytic choices, of which baseline anchoring is the largest.",
          fontsize=8.3, color=MUTED)
 fig.subplots_adjust(left=0.30, right=0.98, top=0.93, bottom=0.16)
 fig.savefig("paper3_fig3_allchannels.png", dpi=200, facecolor=SURFACE)

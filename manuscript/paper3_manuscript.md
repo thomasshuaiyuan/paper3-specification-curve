@@ -8,21 +8,23 @@
 
 \* Corresponding author: veej@hku.hk
 
-*DRAFT v1, 8 August 2026. Target: Eurosurveillance, Research article (≤3,500 words, ≤6 illustrations, 15–30 references).*
+*DRAFT v2, 5 September 2026. Target: Eurosurveillance, Research article (≤3,500 words, ≤6 illustrations, 15–30 references).*
+
+*v2 folds in the United States replication (`claude/fluview_replication_results.md`). The replication refuted one prediction: baseline anchoring is the largest dimension in Hong Kong but not in the United States, where the comparator dominates. The Abstract, Discussion, Limitations and Conclusion have been narrowed accordingly. Four passages were compressed to stay inside the word limit; the material moved to the supplement rather than being deleted. Edits and the word accounting are recorded in `claude/paper3_fluview_revision.md`.*
 
 ---
 
 # Abstract
 
-**Background.** Hospital admissions and similar signals are widely proposed as early-warning indicators for influenza season onset. Estimating how far they lead an onset declaration requires analytic decisions that are rarely reported.
+**Background.** Hospital admissions and similar signals are widely proposed as early-warning indicators for influenza onset. Estimating how far they lead an onset declaration requires analytic decisions that are rarely reported.
 
 **Aim.** To quantify how much the estimated lead time depends on those decisions, and identify which a reader needs.
 
-**Methods.** We analysed 638 weeks of Centre for Health Protection Flu Express data from Hong Kong (January 2014 to March 2026), covering 13 surveillance channels and eight influenza seasons. Analytic choices were fully crossed for three onset-detection families — threshold crossing, the moving epidemic method, and R(t) by the renewal equation — giving 576 to 1,728 specifications per channel per family. All three were also run over an identical 48-specification subspace of the choices they share, comparing their stability on equal terms.
+**Methods.** We analysed 638 weeks of Centre for Health Protection Flu Express data from Hong Kong (January 2014 to March 2026), covering 13 surveillance channels and eight influenza seasons. Analytic choices were fully crossed for three onset-detection families — threshold crossing, the moving epidemic method, and R(t) by the renewal equation — giving 576 to 1,728 specifications per channel per family, and over an identical 48-specification subspace on equal terms. The threshold-crossing analysis was repeated on United States surveillance.
 
-**Results.** Median lead reverses sign in all 13 channels and a signal leads in only 14% to 37% of threshold specifications. The largest driver is baseline anchoring, at 26.3 days: whether non-season weeks come from laboratory positivity or from each channel's own distribution decides the sign of the pooled result. R(t) disagrees with both magnitude-based families, the same channels leading in 73% to 100% of its specifications. On the equal-terms subspace MEM is not the narrowest family but is the only one that never reverses direction.
+**Results.** Median lead reverses sign in all 13 channels and a signal leads in only 14% to 37% of threshold specifications. The largest driver is baseline anchoring, at 26.3 days, deciding the sign of the pooled result; on United States data the sign still reverses in all ten channels but the comparator threshold dominates instead. R(t) disagrees with both magnitude-based families, the same channels leading in 73% to 100%. On the equal-terms subspace MEM is not the narrowest family but is the only one that never reverses direction.
 
-**Conclusion.** Whether a surveillance signal appears to provide early warning depends more on unreported analytic choices, and on the estimator class, than on the data. We propose a minimum reporting set.
+**Conclusion.** Whether a signal appears to provide early warning depends more on unreported analytic choices and estimator class than on the data, in two independent systems. We propose a minimum reporting set.
 
 ---
 
@@ -32,13 +34,13 @@ Public health agencies declare influenza season onset when a surveillance indica
 
 Because positivity is a lagging indicator of transmission, signals that might cross earlier attract interest. Paediatric and adolescent hospital admissions have been proposed as sentinel signals, on the argument that school-age contact patterns amplify transmission before it is visible in laboratory data [4,5]. Multi-stream work in Hong Kong has integrated outpatient and school absenteeism data for situational awareness [6].
 
-Evaluating such a claim requires a lead time: the interval between a candidate series crossing its own threshold and the reference indicator crossing its threshold. Producing that number involves at least eight decisions, covering how non-season weeks are identified and from which series, what statistic sets the threshold, how pandemic weeks are handled, whether the series is smoothed, how many weeks above threshold are required, which seasons are analysed, and what the crossing is compared against. None is wrong, each has published precedent, and all but the threshold statistic are seldom stated.
+Evaluating such a claim requires a lead time: the interval between a candidate series crossing its own threshold and the reference indicator crossing its threshold. Producing that number involves at least eight decisions, covering how non-season weeks are identified and from which series, what statistic sets the threshold, and how pandemic weeks, smoothing, the sustained-crossing rule, the season set and the comparator are handled (Table 1). None is wrong, each has published precedent, and all but the threshold statistic are seldom stated.
 
-Fields that have examined this flexibility find it consequential. Simmons et al. [7] showed that undisclosed flexibility can produce apparently significant findings from null data, and Gelman and Loken [8] described the same problem where no explicit search occurs. Multiverse [9] and specification curve analysis [10] compute the estimate under every reasonable specification; applied to adolescent well-being, that showed reported effect sizes spanning the range obtainable by analytic choice alone [11].
+Fields that have examined this flexibility find it consequential. Simmons et al. [7] showed that undisclosed flexibility can produce apparently significant findings from null data, and Gelman and Loken [8] described the same problem where no explicit search occurs. Multiverse [9] and specification curve analysis [10] compute the estimate under every reasonable specification; applied to adolescent well-being, reported effect sizes spanned the range obtainable by analytic choice alone [11].
 
 A second source of flexibility sits above the analytic one. Onset can be defined by threshold crossing, by the moving epidemic method, or by R(t) crossing 1. These do not mark the same event: R(t) > 1 identifies when growth begins, the other two when magnitude has accumulated. All three are in use and lead times from them are compared as though they were one quantity.
 
-Surveillance has not been examined this way, though its pipelines contain comparable flexibility and its outputs inform operational decisions. We apply specification curve analysis to influenza onset lead times in Hong Kong, across every channel the system collects and all three families, and use the result to propose what such analyses should report.
+Surveillance has not been examined this way, though its pipelines contain comparable flexibility and its outputs inform operational decisions. We apply specification curve analysis to influenza onset lead times in Hong Kong, across every channel the system collects and all three families, replicate it on an independent national system, and propose what such analyses should report.
 
 # Methods
 
@@ -46,7 +48,11 @@ Surveillance has not been examined this way, though its pipelines contain compar
 
 Weekly CHP Flu Express reports covering January 2014 to March 2026 provide 638 weeks of publicly available surveillance data [12]. Combined influenza A and B laboratory positivity is the reference indicator. As candidate signals we use every channel complete and non-degenerate across the study seasons: influenza-associated hospital admission rates per 10,000 population for all ages and six age strata (0–5, 6–11, 12–17, 18–49, 50–64, 65 and above), influenza-like illness consultation rates from private general practitioners, emergency departments and Chinese medicine practitioners, school and non-school outbreak counts, and residential care home fever surveillance. This gives 13 channels spanning six data-generating processes.
 
-Three channels were excluded for incompleteness: family medicine consultations, severe case counts and kindergarten fever surveillance, each usable in 4 or fewer of the 8 seasons. No other data source was used and no model was fitted. The six age-stratified admission series are reported separately in Supplementary Table S1.
+Three channels were excluded for incompleteness: family medicine consultations, severe case counts and kindergarten fever surveillance, each usable in 4 or fewer of the 8 seasons. No model was fitted. The six age-stratified admission series are reported separately in Supplementary Table S1.
+
+## Replication data
+
+For the replication we used United States surveillance from the Delphi Epidata API [19]: FluSurv-NET hospitalisation rates for eight age strata and all ages [20], clinical laboratory positivity as the comparator, and ILINet weighted influenza-like illness, giving 333 weeks and ten seasons. These series are revised, so a single issue was pinned and recorded with the code. The space adds a rolling three-season reference period and a mean + 2 SD statistic, both matching how the ILINet baseline is computed [2].
 
 ## Outcome
 
@@ -64,7 +70,7 @@ The second family estimates the effective reproduction number by the renewal-equ
 
 Seven dimensions were crossed, again giving 864 specifications per channel: serial interval mean (2, 3, 4 days), spanning the range reported for influenza [14], and standard deviation (1, 2 days); estimation window (2, 3, 4, 6 weeks); prior (Gamma(1, 0.2), Gamma(0.001, 0.001), Gamma(1, 5)); incidence proxy scaling (×10^3^, ×10^4^, ×10^5^); onset rule (posterior mean > 1, or posterior 2.5th percentile > 1); and the same two comparator thresholds.
 
-Scaling is an explicit dimension rather than a preprocessing detail because the posterior is not scale-invariant: multiplying incidence by a constant scales both sums, so the prior washes out as the multiplier grows. Surveillance series are converted to pseudo-incidence by multipliers chosen for convenience, often differing between channels in one analysis.
+Scaling is an explicit dimension rather than a preprocessing detail because the posterior is not scale-invariant: multiplying incidence by a constant scales both sums, so the prior washes out as the multiplier grows.
 
 ## The moving epidemic method
 
@@ -72,17 +78,17 @@ The third family is the moving epidemic method (MEM), used by ECDC and many nati
 
 Published applications disagree on the details, and those disagreements form the specification space: values taken per season (3, 5, 8, 12); arithmetic or geometric mean; confidence level (90%, 95%, 99%); one week above threshold or two consecutive; non-epidemic values from before the seasonal peak only or from both sides; the same three pandemic-era options; and the same two comparators, giving 576 specifications per channel.
 
-Our implementation approximates rather than reproduces the `mem` R package, which selects each season's epidemic period by an iterative MAP-curve procedure where we treat the weeks within two of the peak as epidemic. Results characterise the family, not any particular implementation.
+Our implementation approximates rather than reproduces the `mem` R package, which selects each season's epidemic period by an iterative MAP-curve procedure where we treat weeks within two of the peak as epidemic. Results characterise the family.
 
 ## Comparing families on equal terms
 
-Spreads are not comparable across families whose specification spaces differ in size, and ours do: the MEM space contains no analogue of the non-season quantile sweep, and the R(t) space varies neither pandemic-era handling, smoothing, season set nor the sustained rule. A family given fewer ways to move will move less. We therefore also ran all three over an identical subspace of the five choices they share in kind — comparator, pandemic-era handling, smoothing, season set and the sustained rule — giving 48 specifications per family per channel, with family-specific parameters pinned at stated reference values (Supplementary Table S3). The full spaces answer how far each estimate can move; this subspace answers which family moves least given the same choices.
+Spreads are not comparable across families whose specification spaces differ in size, and ours do: the MEM space contains no analogue of the non-season quantile sweep, and the R(t) space varies neither pandemic-era handling, smoothing, season set nor the sustained rule. We therefore also ran all three over an identical subspace of the five choices they share in kind, giving 48 specifications per family per channel, with family-specific parameters pinned at stated reference values (Supplementary Table S3).
 
 ## Analysis
 
-The analysis plan, including the specification space and four predictions, was written before the curve was computed and is available with the code. The anchoring dimension and the equal-terms comparison were added later, under a second pre-specified plan with five further predictions, also available with the code. Specifications in which a channel never crosses contribute a missing value, and the count of such specifications is reported.
+Three pre-specified analysis plans, carrying fourteen predictions in total, were written before the corresponding results were computed: the original space and four predictions, then the anchoring dimension and equal-terms comparison with five more, then the replication with five more. All are available with the code. Specifications in which a channel never crosses contribute a missing value, and the count is reported.
 
-We report the distribution of median lead across specifications, the proportion yielding a positive lead, and the proportion with no crossing. Each dimension's contribution is summarised by the swing in mean median-lead between its extreme levels. Analyses used Python 3.11; code and full specification-level output are at the repository listed under Data availability.
+We report the distribution of median lead, the proportion yielding a positive lead, and the proportion with no crossing. Each dimension's contribution is summarised by the swing in mean median-lead between its extreme levels. Analyses used Python 3.11; code and full specification-level output are at the repository listed under Data availability.
 
 # Results
 
@@ -90,7 +96,7 @@ We report the distribution of median lead across specifications, the proportion 
 
 Across 1,728 specifications the median lead time ranges from −84 to +84 days (Supplementary Table S1), and every age group produces both positive and negative median leads. The narrowest range, for the 0–5 year group, still spans 105 days; the widest, for 12–17 years, 154. Figure 1 shows the specification curve for private outpatient consultations with the analytic choices beneath it; Supplementary Figure S1 shows the age-stratified admission series separately.
 
-Admissions cross before positivity in 17.6% of specifications for the 12–17 year group, rising to 32.1% for 6–11 years. Under most defensible analyses of these data, age-stratified admissions cross their own baseline after positivity has already crossed the operational threshold, not before.
+Admissions cross before positivity in 17.6% of specifications for the 12–17 year group and 32.1% for 6–11 years. Under most defensible analyses, age-stratified admissions cross their own baseline after positivity has crossed the operational threshold, not before.
 
 ## Baseline anchoring dominates every other choice
 
@@ -98,27 +104,23 @@ Table 2 gives the swing attributable to each dimension. Baseline anchoring is th
 
 The anchoring effect is directional and large enough to reverse the pooled result. Mean median-lead is −14.7 days under reference anchoring and +11.6 under own-series anchoring, so one unstated structural choice decides whether these data appear to show early warning at all. It also takes sign reversal from 12 of 13 channels to all 13.
 
-The mechanism is that own-series anchoring lets a channel's own low values set its bar, and zero-inflated series benefit most in relative terms: the fraction of weeks at zero within a channel's low half predicts how far its threshold falls (ρ = 0.570, p = 0.042), though not the shift in days (ρ = −0.470, p = 0.105), which also depends on how steeply the channel rises through the bar.
+The mechanism is that own-series anchoring lets a channel's own low values set its bar, and zero-inflated series benefit most in relative terms: the fraction of weeks at zero within a channel's low half predicts how far its threshold falls (ρ = 0.570, p = 0.042), though not the shift in days (ρ = −0.470, p = 0.105).
 
-The influential choices also compound: the specification producing the largest apparent lead is identical across age groups (own-series anchoring, operational comparator, pandemic weeks retained, non-season restricted to the lowest quartile, a low baseline statistic), and yields +84 days for four of six groups against a pooled median of 0 to −7. Pandemic weeks contribute because influenza circulation fell to near zero under non-pharmaceutical interventions, so retaining them lowers a baseline's level and variance together [15].
+The influential choices also compound: the specification producing the largest apparent lead is identical across age groups, and yields +84 days for four of six against a pooled median of 0 to −7. Pandemic weeks contribute because influenza circulation fell to near zero, so retaining them lowers a baseline's level and variance together [15].
 
-The ordering of the remaining dimensions is close to the inverse of current reporting practice: season set and smoothing are among the most often stated and move the estimate least, while the comparator and the anchoring convention, which contribute most, are frequently implicit or absent.
+The ordering is close to the inverse of reporting practice: season set and smoothing are among the most often stated and move the estimate least, while the comparator and anchoring convention contribute most and are frequently implicit.
 
 ## The instability is not specific to hospital admissions
 
-Across all 13 channels, 22,464 estimates (Figure 2, Supplementary Table S2), the sign of the median lead reverses in every one. Ranges span 105 days for 0–5 year admissions to 217 for care-home fever, and the two widest belong to non-admissions channels.
-
-Aggregating by data-generating process, a signal crosses before positivity in 33.5% of specifications for traditional medicine consultations and 23.4% to 25.5% for each of the other five. Early crossing is a minority result for every signal family Hong Kong collects, and differences between families are smaller than differences within any one.
-
-Restricting to reference anchoring reproduces the original seven-dimension analysis exactly — sign reversal in 12 of 13 channels, spreads of 105 to 189 days, positive leads in 0% to 20.6% — so the changes above are attributable to the added dimension alone.
+Across all 13 channels, 22,464 estimates (Figure 2, Supplementary Table S2), the sign of the median lead reverses in every one. Ranges span 105 days for 0–5 year admissions to 217 for care-home fever, and the two widest belong to non-admissions channels. Early crossing is a minority result for every data-generating process, from 23.4% to 33.5% of specifications, and differences between processes are smaller than differences within any one. Restricting to reference anchoring reproduces the original seven-dimension analysis exactly (Supplementary Note S3).
 
 ## R(t)-based onset reverses the direction of the finding
 
 R(t)-based onset produces the opposite answer (Figure 3, Table 3): under threshold crossing a signal leads positivity in 14% to 37% of specifications, under R(t) in 73% to 100%, and the disagreement holds for all 13 channels.
 
-Part of this gap is definitional: R(t) > 1 marks the onset of growth whereas a threshold marks accumulated magnitude, so a growth criterion fires earlier on the same series. That is a reason to avoid comparing lead times across families, not to prefer one.
+Part of this gap is definitional: R(t) > 1 marks the onset of growth whereas a threshold marks accumulated magnitude, so a growth criterion fires earlier. That is a reason to avoid comparing lead times across families, not to prefer one.
 
-The families are sensitive to different choices. For R(t) the ranking is prior (23.0 days), estimation window (19.5) and incidence scaling (12.4), while the comparator contributes 0.5 and the serial interval 0.2, the last consistent with weekly data giving roughly one observation per influenza generation. R(t) spreads are wide but uneven: three outpatient channels span only 28 days, while the 12–17 year admission series spans 364, the widest of any channel under any family. The scaling effect is concentrated in the vague Gamma(0.001, 0.001) prior, under which the multiplier alone moves the mean median-lead by 41 days (Supplementary Note S1); a vague prior is adopted to avoid influencing the result and on pseudo-incidence does the opposite.
+The families are sensitive to different choices. For R(t) the ranking is prior (23.0 days), estimation window (19.5) and incidence scaling (12.4), while the comparator contributes 0.5 and the serial interval 0.2, the last consistent with weekly data giving roughly one observation per influenza generation. R(t) spreads are wide but uneven: three outpatient channels span only 28 days, while the 12–17 year admission series spans 364, the widest of any channel under any family. The scaling effect is concentrated in the vague Gamma(0.001, 0.001) prior, under which the multiplier alone moves the mean median-lead by 41 days (Supplementary Note S1).
 
 ## The operational method is directionally stable, not narrow
 
@@ -130,19 +132,23 @@ What survives is a different and more useful property. MEM is the only family wh
 
 R(t) is widest under both treatments, reversing sign in every channel, so its instability is a property of the estimator rather than of its parameter count. Threshold crossing still reverses sign in 7 of 13 channels within a subspace containing none of the baseline-construction choices, so the dispersion finding is not an artifact of a wide space either.
 
+## The instability replicates on an independent system, the driver ranking does not
+
+Repeating the threshold-crossing analysis on United States surveillance (FluSurv-NET, ILINet and clinical laboratory positivity; 333 weeks, ten seasons, ten channels, 3,024 specifications each) reproduces the dispersion finding and not the driver ranking (Table 4). The sign reverses in all ten channels, spreads run 70 to 91 days, and own-series anchoring again lengthens apparent leads in every channel. But the comparator is the largest dimension there at 14.4 days and anchoring only fourth at 5.6, because the two agencies attach their published thresholds to different indicators. Details are in Supplementary Note S2.
+
+One dimension was added because CDC computes its baseline from a rolling three-season reference period where the Hong Kong analysis used a fixed pool. It moved the pooled estimate by 0.1 days, so the Hong Kong space was not incomplete in that respect.
+
 ## Published estimates fall inside the specification range
 
-Two published estimates of the same quantity can be placed on the curve directly.
-
-Schanzer et al. [17] report hospitalisations leading laboratory-positive tests by 1.6 days (95% CI −1.5 to 4.7) across 28 Canadian regional seasons; their interval spans 37% of our specifications. White et al. [18] found electronic laboratory reporting leading admissions by one to two weeks in California, a window containing 39% of our all-ages specifications, with neither threshold nor baseline reported. Both fall inside the range obtainable by analytic choice alone and both side with the magnitude-based families. This is a convenience sample of two, not a systematic review.
+Two published estimates fall inside the range obtainable by analytic choice alone: Schanzer et al. [17] report 1.6 days (95% CI −1.5 to 4.7), spanning 37% of our specifications, and White et al. [18] one to two weeks, containing 39%.
 
 ## Restricting to a core specification set
 
-Within the reference-anchored half of the space, excluding specifications that stack more than two extreme choices retains 688 of 864 (80%). The sign still reverses in 12 of 13 channels and the median spread falls only from 140 to 112 days, so the instability is not an artifact of implausible corners. This and the operational analysis below use reference anchoring, the conservative half.
+Within the reference-anchored half of the space, excluding specifications that stack more than two extreme choices retains 688 of 864 (80%). The sign still reverses in 12 of 13 channels and the median spread falls only from 140 to 112 days, so the instability is not an artifact of implausible corners alone.
 
 ## The choice has operational consequences
 
-For 0–5 year admissions under core specifications, the median gap between the earliest and latest defensible onset declaration is **11.5 weeks**, the maximum 33 (2016/17). Only 2023/24 shows complete agreement across all 212 core specifications; in the remaining seven an agency could have declared onset anywhere in a 5 to 33 week window.
+For 0–5 year admissions under core specifications, the median gap between the earliest and latest defensible onset declaration is **11.5 weeks**, the maximum 33 (2016/17). Only 2023/24 shows complete agreement across all 212 core specifications; in the remaining seven, onset could have been declared anywhere in a 5 to 33 week window.
 
 # Discussion
 
@@ -150,13 +156,13 @@ Four findings follow from these data.
 
 First, a reported admissions-based lead time carries little information without its specification. The estimate spans 105 to 154 days depending on age group, and reverses sign, on one surveillance system with complete data and no modelling.
 
-Second, the choices that matter are not the ones reported, and the largest has no name in this literature. Whether a baseline is anchored to an external reference series or to the channel's own distribution moves the estimate by 26 days and reverses the pooled sign, yet is almost never stated. The comparator threshold follows. Smoothing, the sustained rule and season selection are stated more often and matter far less.
+Second, the choices that matter are not the ones reported, and one of the largest has no name in this literature. Whether a baseline is anchored to an external reference series or to the channel's own distribution moves the estimate by 26 days in Hong Kong and reverses the pooled sign, yet is almost never stated. On United States data the same choice is directional in every channel but smaller than the comparator, which is the largest there. Which unreported choice dominates is therefore a property of how an agency constructs its operational threshold, not a constant; that the estimate is dominated by unreported choices is the part that generalises.
 
-Third, the influential choices are directional and mutually reinforcing, which distinguishes this from ordinary imprecision. An analyst preferring a favourable conclusion has four levers worth roughly four, three, two and one and a half weeks, all pushing the same way, none requiring a step a reviewer would call wrong. This is the garden-of-forking-paths structure [8], arising in surveillance rather than in an experiment.
+Third, the influential choices are directional and mutually reinforcing, which distinguishes this from ordinary imprecision. An analyst preferring a favourable conclusion has four levers worth roughly four, three, two and one and a half weeks, all pushing the same way, none requiring a step a reviewer would call wrong. This is the garden-of-forking-paths structure [8], in surveillance rather than in an experiment.
 
-Fourth, the estimator class matters at least as much as the choices within it, but not in the way a naive comparison suggests. On its own space the moving epidemic method looked much the most stable; given the same five choices as the others it is not, because its published space contains fewer of the dimensions that move estimates. What survives is that MEM alone never reverses direction, which is robustness in the conclusion rather than precision in the magnitude, and is the property an agency deciding whether to act needs.
+Fourth, the estimator class matters at least as much as the choices within it, but not in the way a naive comparison suggests. On its own space the moving epidemic method looked much the most stable; given the same five choices it is not, because its published space contains fewer of the dimensions that move estimates. What survives is that MEM alone never reverses direction, which is robustness in the conclusion rather than precision in the magnitude, and is the property an agency deciding whether to act needs.
 
-That correction is the paper's own argument turned on itself. Nothing about the data or the methods changed between the two comparisons, only how many ways each family was permitted to vary, which was our choice and went unreported. We state it rather than quietly fixing it, because a specification-curve analysis concealing a specification artifact in its own headline comparison would be worth little.
+That correction is the paper's own argument turned on itself: nothing about the data or the methods changed between the two comparisons, only how many ways each family was permitted to vary, which was our choice and went unreported.
 
 We do not claim any published lead time is incorrect, and this analysis cannot identify a correct specification. None arises from these data; that is the point. What follows is a reporting requirement.
 
@@ -166,17 +172,17 @@ Analyses reporting onset lead times should state, at minimum, the items measured
 
 For threshold crossing, in order of measured effect: the baseline anchoring, meaning whether non-season weeks are identified from an external reference series or from the channel's own distribution; the comparator threshold and whether it is operational or derived from the same data; the baseline statistic; the rule defining non-season weeks; and the handling of pandemic-period weeks. Two free diagnostics would have caught the anchoring problem before it reached a manuscript: the fraction of weeks at zero within each channel's baseline window, and the resulting threshold as a percentage of that channel's series maximum.
 
-For R(t)-based onset: the prior and its parameterisation, the estimation window, the multiplier converting the proportion to pseudo-incidence, and the onset criterion. The serial interval, almost always reported, moved the estimate by under one day at weekly resolution. For MEM: the values taken from each training season and whether non-epidemic weeks come from before the peak only or from both sides, worth 15.7 and 12.4 days, against under 2 for the confidence level and mean type that published descriptions do specify.
+For R(t)-based onset: the prior and its parameterisation, the estimation window, the multiplier converting the proportion to pseudo-incidence, and the onset criterion. The serial interval, almost always reported, moved the estimate by under one day. For MEM: the values taken from each training season and whether non-epidemic weeks come from before the peak only or both sides, worth 15.7 and 12.4 days, against under 2 for the confidence level and mean type that published descriptions do specify.
 
 Lead times from different families should not be pooled, because R(t) > 1 and a magnitude threshold mark different events. A sensitivity range under the extreme defensible alternatives should accompany the point estimate, and the detection rate should be reported alongside the lead. These are narrower instances of the reporting practices set out in the reproducibility literature [16].
 
 ## Limitations
 
-This analysis covers one surveillance system, one pathogen and eight seasons, though it spans 13 channels, six data-generating processes and three estimator families. Whether the magnitudes replicate elsewhere is untested, and two external estimates are not a survey. The specification space, though larger than usual, remains a subset of defensible analyses; dimensions we did not vary would add variation rather than reduce it, as anchoring did. Our MEM is a reimplementation rather than the `mem` package, and mechanistic-model onset definitions were not examined. Finally, this is descriptive of estimator behaviour and makes no claim about whether any age group is biologically an early amplifier of transmission.
+This analysis covers two surveillance systems and one pathogen. Magnitudes are not comparable between them because FluSurv-NET is catchment-based while Hong Kong admissions are territory-wide, so only dispersion and the ranking of dimensions are compared. Past-season ILINet baselines are not archived and were reconstructed from the published method; against the two seasons with published values the reconstruction is approximately 0.4 percentage points high, making the 14.4-day comparator swing an upper estimate. The specification space, though larger than usual, remains a subset of defensible analyses; dimensions we did not vary would add variation rather than reduce it, as anchoring did. Our MEM is a reimplementation rather than the `mem` package. Finally, this is descriptive of estimator behaviour and makes no claim about whether any age group is biologically an early amplifier of transmission.
 
 # Conclusion
 
-On Hong Kong surveillance data, whether a signal appears to lead laboratory positivity in influenza onset detection is determined more by unreported analytic choices than by the data. The estimate reverses sign for every channel examined, and the largest single driver, whether the baseline is anchored to a reference series or to the channel's own distribution, has no standard name and is almost never stated. Comparisons between estimator families are themselves sensitive to how many choices each family is given; on equal terms the method agencies already use is the only one that never reverses direction, though no more precise than the alternatives. Reporting these choices is inexpensive and would make such estimates comparable across studies for the first time.
+On Hong Kong surveillance data, whether a signal appears to lead laboratory positivity in influenza onset detection is determined more by unreported analytic choices than by the data. The estimate reverses sign for every channel examined, and one of the largest drivers, whether the baseline is anchored to a reference series or to the channel's own distribution, has no standard name and is almost never stated. On United States data the estimate reverses in every channel likewise, though a different unreported choice dominates. Comparisons between estimator families are themselves sensitive to how many choices each family is given; on equal terms the method agencies already use is the only one that never reverses direction, though no more precise than the alternatives. Reporting these choices is inexpensive and would make such estimates comparable across studies for the first time.
 
 # Tables
 
@@ -233,6 +239,18 @@ On Hong Kong surveillance data, whether a signal appears to lead laboratory posi
 | Admissions 50–64y | 0 | 28.1 | 140 | −24 | 0.0 | 35 | +21 | 87.3 | 94 |
 | Admissions 65+y | 0 | 23.1 | 140 | −24 | 0.0 | 46 | +24 | 78.5 | 70 |
 
+**Table 4.** Swing in mean median-lead attributable to each analytic dimension, threshold crossing, United States, pooled across the 10 channels. 3,024 specifications per channel.
+
+| Dimension | Swing (days) |
+|---|---|
+| **Comparator threshold** | **14.4** |
+| Non-season definition | 6.9 |
+| Baseline statistic | 6.2 |
+| Baseline anchoring | 5.6 |
+| Sustained-crossing rule | 1.8 |
+| Pandemic-era handling | 0.8 |
+| Smoothing | 0.7 |
+| Reference period | 0.1 |
 
 
 # Figures
@@ -289,7 +307,23 @@ On Hong Kong surveillance data, whether a signal appears to lead laboratory posi
 | Moving epidemic method | 5 values per training season; arithmetic mean; 95% one-sided limit; pre-peak weeks only |
 | R(t), renewal equation | serial interval mean 3.0 d, SD 2.0; 3-week window; Gamma(1, 0.2) prior; ×10⁴ scaling; posterior-mean rule |
 
-**Supplementary Note S1.** Under the informative priors the incidence multiplier moves the mean median-lead by under 4 days. Under the vague Gamma(0.001, 0.001) prior it moves it from −15.6 to +25.4 days as the multiplier increases from 10^3^ to 10^5^, a 41-day swing from an arbitrary constant. Analyses converting proportions to pseudo-counts should report the multiplier alongside the prior, or verify that the pairing is scale-invariant over the range used.
+**Supplementary Note S1.** Under the informative priors the incidence multiplier moves the mean median-lead by under 4 days. Under the vague Gamma(0.001, 0.001) prior it moves it from −15.6 to +25.4 days as the multiplier increases from 10^3^ to 10^5^, a 41-day swing from an arbitrary constant. A vague prior is adopted to avoid influencing the result and on pseudo-incidence does the opposite. Analyses converting proportions to pseudo-counts should report the multiplier alongside the prior, or verify that the pairing is scale-invariant over the range used.
+
+**Supplementary Note S2. United States replication, full results.** Data were retrieved from the Delphi Epidata API on 4 September 2026 with issues pinned (`flusurv` 202632, `fluview_clinical` 202633). Ten channels and 3,024 specifications each give 28,224 estimates rather than 30,240, because a channel is not compared against itself when it supplies the comparator: ILINet weighted influenza-like illness is therefore absent under the two comparator levels built on it. Ten seasons, 2016/17 to 2025/26.
+
+The sign of the median lead reverses in all ten channels. Spreads: 91 days for the 18–29, 40–49 and 75+ series; 84 for 30–39 and ILINet; 80.5 for 5–11; 77 for 1–4 and all ages; 70 for under 1 and 12–17. The share of specifications yielding a positive lead runs from 31.3% (ILINet) to 62.6% (18–29 years). Own-series anchoring produces longer apparent leads than reference anchoring in 10 of 10 channels, mean +5.6 days, though the pooled sign does not reverse (+1.4 to +7.1).
+
+The comparator dimension is the largest at 14.4 days because its three levels are not equivalent: mean lead is +11.3 days for ILINet against its published baseline, +5.3 for a data-derived influenza-like illness threshold and −3.1 for a data-derived positivity threshold. CDC publishes an operational baseline for influenza-like illness and CHP for laboratory positivity, so the two systems attach their published threshold to different indicators.
+
+Among the nine hospitalisation channels the zero-inflation mechanism identified in Hong Kong holds: the 12–17 year series has both the highest zero fraction (0.497) and the largest anchoring shift (8.3 days), and the two are associated across those channels (Spearman ρ = 0.733, p = 0.025). Including ILINet the association does not hold (ρ = 0.267, p = 0.455); ILINet has no zero inflation and the largest anchoring shift of any channel at 12.5 days, so a second mechanism operates for bounded consultation-rate percentages. This restriction to nine channels was made after seeing the result and is reported as post-hoc.
+
+Past-season ILINet national baselines are not archived by CDC and were reconstructed from the published method [2]: mean weighted influenza-like illness in non-influenza weeks over the three most recent seasons plus two standard deviations, non-influenza weeks being two or more consecutive weeks each accounting for under 2% of the season's positives. Non-influenza weeks were identified from clinical laboratory positives, the series the API exposes, rather than public health laboratory positives. Against the two seasons with published values the reconstruction gives 3.40 against 3.0 and 3.49 against 3.1.
+
+**Supplementary Figure S2.** Range of median lead across all defensible threshold-crossing specifications, every channel of both systems side by side. Left of zero, laboratory positivity crosses first; right of zero, the signal does. The range spans zero in 13 of 13 Hong Kong channels and 10 of 10 United States channels. Magnitudes are not comparable between the systems (Limitations); the dispersion is.
+
+![Supplementary Figure S2](paper3_fig_hk_us.png)
+
+**Supplementary Note S3.** Restricting the Hong Kong analysis to reference anchoring reproduces the original seven-dimension analysis exactly: sign reversal in 12 of 13 channels, spreads of 105 to 189 days, positive leads in 0% to 20.6% of specifications. The changes reported under the eight-dimension space are therefore attributable to the added dimension alone.
 
 **Supplementary Figure S1.** Specification curves for all six age-stratified admission series individually under threshold crossing.
 
@@ -297,7 +331,7 @@ On Hong Kong surveillance data, whether a signal appears to lead laboratory posi
 
 # Data availability
 
-CHP Flu Express data are publicly available at https://www.chp.gov.hk. Analysis code, the pre-specified analysis plan and specification-level output are available at [repository URL to be added].
+CHP Flu Express data are publicly available at https://www.chp.gov.hk. United States data are publicly available through the Delphi Epidata API. Analysis code, the three pre-specified analysis plans and specification-level output are available at [repository URL to be added].
 
 # Ethics
 
@@ -355,4 +389,8 @@ The authors declare no competing interests.
 
 18. White LA, Sun M, Burnor E, Murray EL, Hoover C, Penton C, et al. A new surveillance landscape for seasonal influenza? Comparing lab-confirmed influenza hospitalizations with other syndromic and surveillance data sources for the state of California. AJE Adv. 2026;2(2):uuag019. doi:10.1093/ajeadv/uuag019
 
-*18 references, numbered in order of first appearance, matching the convention used in the companion manuscript and the Eurosurveillance house style.*
+19. Farrow DC, Brooks LC, Rumack A, Tibshirani RJ, Rosenfeld R. Delphi Epidata API. Pittsburgh: Carnegie Mellon University Delphi Group; 2026. Available from: https://cmu-delphi.github.io/delphi-epidata/ [VERIFY preferred citation form before submission]
+
+20. Centers for Disease Control and Prevention. FluSurv-NET: influenza hospitalization surveillance network. Atlanta: CDC; 2026. Available from: https://www.cdc.gov/fluview/surveillance/2024-hospitalization-methods.html [VERIFY URL and citation form before submission]
+
+*20 references, numbered in order of first appearance, matching the convention used in the companion manuscript and the Eurosurveillance house style.*

@@ -17,6 +17,7 @@ plt.rcParams.update({
 })
 
 curve = pd.read_csv("paper3_anchor_speccurve.csv")
+NUMWORD = {5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten"}
 AGE_LABEL = {"Adm_0_5": "0–5y", "Adm_6_11": "6–11y", "Adm_12_17": "12–17y",
              "Adm_18_49": "18–49y", "Adm_50_64": "50–64y", "Adm_65_higher": "65+y"}
 FOCUS = "ILI_PMP"
@@ -75,7 +76,8 @@ ax2.tick_params(axis="x", labelsize=9)
 fig.text(0.008, 0.008,
          "Each column is one analysis of the same Hong Kong CHP data, 2014–2026. "
          "Blue = the signal crosses before laboratory positivity; orange = after. "
-         "Seven analytic choices fully crossed; none is routinely reported.",
+         f"{NUMWORD[len(DIMS)].capitalize()} analytic choices fully crossed; "
+         "none is routinely reported.",
          fontsize=8.4, color=MUTED)
 fig.subplots_adjust(left=0.235, right=0.985, top=0.93, bottom=0.075)
 fig.savefig("paper3_fig1_speccurve.png", dpi=200, facecolor=SURFACE)
