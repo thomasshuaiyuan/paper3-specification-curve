@@ -87,7 +87,8 @@ src/figures/ figure scripts
 results/     generated — 4 specification curves, core subset, operational gap
 figures/     generated — 3 in-text figures + 2 supplementary
 manuscript/  .md source, .docx for Vijay, .pdf reading copy
-docs/        pre-specified plans, scored results, reporting checklist
+docs/        pre-specified plans, scored results, reporting checklist,
+             and verification records
 archive/     scripts not used by the manuscript (see archive/README.md)
 verify.py    58 assertions tying the manuscript to results/ and us/
 runall.sh    the driver
